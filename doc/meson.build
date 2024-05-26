@@ -4,6 +4,17 @@ expand_content_md_files = [
   'plugin-guide.md'
 ]
 
+website_pages = [
+  'index.html',
+  'plugins.html'
+]
+
+website_deps = [
+  'pages.py',
+  'page.html',
+  meson.project_source_root() / 'NEWS'
+]
+
 toml_data = configuration_data()
 toml_data.set('VERSION', meson.project_version())
 
@@ -14,8 +25,6 @@ rb_toml = configure_file(
 )
 
 gidocgen = find_program('gi-docgen')
-
-docs_dir = datadir / 'doc'
 
 fs = import('fs')
 fs.copyfile(meson.project_source_root() / 'data/icons/hicolor/scalable/apps/org.gnome.Rhythmbox3.svg')
@@ -35,5 +44,17 @@ custom_target('apidoc',
     '@INPUT1@',
   ],
   depend_files: [ expand_content_md_files ],
+  build_by_default: true,
+)
+
+custom_target('website',
+  input: website_pages,
+  output: website_pages,
+  depend_files: website_deps,
+  command: [
+    find_program('pages.py'),
+    '@SOURCE_ROOT@:@SOURCE_ROOT@/doc',
+    '@OUTPUT@'
+  ],
   build_by_default: true,
 )

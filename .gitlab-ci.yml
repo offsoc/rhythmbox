@@ -34,6 +34,7 @@ variables:
     libgrilo-0.3-dev
     libxml2-dev
     libtdb-dev
+    python3-jinja2
     python3-pip
     ninja-build
     check
